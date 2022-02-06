@@ -38,3 +38,8 @@ useEffect with the second parameter not set it will run every time the component
 useEffect(() => {}, [enteredPassword]);
 useEffect with the second parameter set will only run when 
 the parameters in the array will change
+
+useReducer hook
+Context API with .Provider 
+useContext hook 
+React Context is NOT optimized for high frequency changes

@@ -1,8 +1,18 @@
-import React from 'react';
+import React from "react";
 
-import Navigation from './Navigation';
-import classes from './MainHeader.module.css';
+import Navigation from "./Navigation";
+import classes from "./MainHeader.module.css";
 
+const MainHeader = (props) => {
+  return (
+    <header className={classes["main-header"]}>
+      <h1>A Typical Page</h1>
+      <Navigation />
+    </header>
+  );
+};
+
+/* Commented code is not using context
 const MainHeader = (props) => {
   return (
     <header className={classes['main-header']}>
@@ -10,6 +20,6 @@ const MainHeader = (props) => {
       <Navigation isLoggedIn={props.isAuthenticated} onLogout={props.onLogout} />
     </header>
   );
-};
+};*/
 
 export default MainHeader;

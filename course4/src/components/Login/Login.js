@@ -1,9 +1,9 @@
-import React, { useState, useReducer } from "react";
-//import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer, useContext } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
+import AuthContext from "../../store/auth-context";
 
 /**
  * Last state and the action that was dispatched
@@ -31,13 +31,35 @@ const emailReducer = (state, action) => {
   };
 };
 
+const passwordReducer = (state, action) => {
+  if (action.type === "USER_INPUT") {
+    return {
+      value: action.val,
+      isValid: action.val.trim().length > 6,
+    };
+  }
+
+  if (action.type === "INPUT_BLUR") {
+    return {
+      // state is always the current state value
+      value: state.value,
+      isValid: state.value.trim().length > 6,
+    };
+  }
+
+  return {
+    value: "",
+    isValid: false,
+  };
+};
+
 // Comments are with the code used before useReducer
 
 const Login = (props) => {
   //const [enteredEmail, setEnteredEmail] = useState("");
   //const [emailIsValid, setEmailIsValid] = useState();
-  const [enteredPassword, setEnteredPassword] = useState("");
-  const [passwordIsValid, setPasswordIsValid] = useState();
+  //const [enteredPassword, setEnteredPassword] = useState("");
+  //const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
   // second parameter is initial state
@@ -47,39 +69,46 @@ const Login = (props) => {
     isValid: null,
   });
 
-  // useEffect(() => {
-  //   const timeoutIdentifier = setTimeout(() => {
-  //     console.log("Check form validity!");
-  //     setFormIsValid(
-  //       enteredEmail.includes("@") && enteredPassword.trim().length > 6
-  //     );
-  //   }, 500);
+  const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
+    value: "",
+    isValid: null,
+  });
 
-  //   // this will run as a cleanup function, this will run before useEffect runs
-  //   // except for the first time
-  //   return () => {
-  //     console.log("CLEAN UP");
-  //     clearTimeout(timeoutIdentifier);
-  //   };
-  // }, [enteredEmail, enteredPassword]);
+  // object destructuring
+  // assigning aliases for the isValid property of emailState and passwordState
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
+
+  useEffect(() => {
+    const timeoutIdentifier = setTimeout(() => {
+      console.log("Check form validity!");
+      setFormIsValid(emailIsValid && passwordIsValid);
+    }, 500);
+
+    // this will run as a cleanup function, this will run before useEffect runs
+    // except for the first time
+    return () => {
+      console.log("CLEAN UP");
+      clearTimeout(timeoutIdentifier);
+    };
+  }, [emailIsValid, passwordIsValid]);
 
   const emailChangeHandler = (event) => {
     //setEnteredEmail(event.target.value);
 
     dispatchEmail({ type: "USER_INPUT", val: event.target.value });
 
-    setFormIsValid(
-      event.target.value.includes("@") && enteredPassword.trim().length > 6
-    );
+    //setFormIsValid(event.target.value.includes("@") && passwordState.isValid);
   };
 
   const passwordChangeHandler = (event) => {
-    setEnteredPassword(event.target.value);
+    //setEnteredPassword(event.target.value);
+    dispatchPassword({ type: "USER_INPUT", val: event.target.value });
 
-    setFormIsValid(
+    /*setFormIsValid(
       emailState.isValid && event.target.value.trim().length > 6
       //emailState.value.includes("@") && event.target.value.trim().length > 6
-    );
+    );*/
   };
 
   const validateEmailHandler = () => {
@@ -88,14 +117,22 @@ const Login = (props) => {
   };
 
   const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.trim().length > 6);
+    //setPasswordIsValid(enteredPassword.trim().length > 6);
+    dispatchPassword({ type: "INPUT_BLUR" });
   };
 
+  const ctx = useContext(AuthContext);
   const submitHandler = (event) => {
     event.preventDefault();
     //props.onLogin(enteredEmail, enteredPassword);
-    props.onLogin(emailState.value, enteredPassword);
+    ctx.onLogin(emailState.value, passwordState.value);
   };
+  /* Commented code doesn't use context
+  const submitHandler = (event) => {
+    event.preventDefault();
+    //props.onLogin(enteredEmail, enteredPassword);
+    props.onLogin(emailState.value, passwordState.value);
+  };*/
 
   return (
     <Card className={classes.login}>
@@ -116,14 +153,14 @@ const Login = (props) => {
         </div>
         <div
           className={`${classes.control} ${
-            passwordIsValid === false ? classes.invalid : ""
+            passwordState.isValid === false ? classes.invalid : ""
           }`}
         >
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            value={enteredPassword}
+            value={passwordState.value}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
           />
