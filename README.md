@@ -43,3 +43,6 @@ useReducer hook
 Context API with .Provider 
 useContext hook 
 React Context is NOT optimized for high frequency changes
+
+### Course 5
+Using all that was explained in course 4
