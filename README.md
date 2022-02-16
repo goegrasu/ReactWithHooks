@@ -46,3 +46,11 @@ React Context is NOT optimized for high frequency changes
 
 ### Course 5
 Using all that was explained in course 4
+
+### Course 6
+How React works behind the scenes. \
+React.memo() evaluates the props a component has and if one of the props has changed, only then the \
+code in that component will rerun and the component will be re-evaluated
+
+useCallback hook allows us to store a function across component execution and not rebuild it at every component re-evaluation
+useMemo hook allows us to store a value like useCallback does it for functions
