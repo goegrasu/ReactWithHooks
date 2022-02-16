@@ -54,3 +54,6 @@ code in that component will rerun and the component will be re-evaluated
 
 useCallback hook allows us to store a function across component execution and not rebuild it at every component re-evaluation
 useMemo hook allows us to store a value like useCallback does it for functions
+
+### Course 7
+Class based components
