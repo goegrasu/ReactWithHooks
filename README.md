@@ -57,3 +57,10 @@ useMemo hook allows us to store a value like useCallback does it for functions
 
 ### Course 7
 Class based components
+Error Boundaries only doable as a class component
+
+### Course 8 
+Http requests using fetch and as backend using firebase
+
+### Course 9
+
