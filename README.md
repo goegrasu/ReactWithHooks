@@ -63,4 +63,5 @@ Error Boundaries only doable as a class component
 Http requests using fetch and as backend using firebase
 
 ### Course 9
-
+Custom hooks \
+the name of the custom hook function MUST start with use
